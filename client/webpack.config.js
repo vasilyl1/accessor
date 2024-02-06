@@ -3,6 +3,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
+
 module.exports = () => {
   return {
     mode: 'development',
@@ -43,9 +44,10 @@ module.exports = () => {
         publicPath: './',
         icons: [
           {
-            src: path.resolve('src/icons/brain-icon.png'),
-            sizes: [16, 32, 96, 128, 180, 192, 256, 384, 512],
+            src: path.resolve('./src/icons/brain-icon.png'),
+            sizes: [16, 32, 48, 96, 128, 180, 192, 256, 384, 512],
             destination: path.join('assets', 'icons'),
+            ios: true,
           },
         ],
       }),
@@ -56,7 +58,7 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
+          use: ['style-loader', 'css-loader', 'postcss-loader'],
         },
         {
           test: /\.m?js$/,
@@ -66,7 +68,10 @@ module.exports = () => {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
-              plugins: ['@babel/plugin-transform-object-rest-spread', '@babel/transform-runtime'],
+              plugins: [
+                '@babel/plugin-transform-object-rest-spread', 
+                '@babel/transform-runtime'
+              ],
             },
           },
         },
