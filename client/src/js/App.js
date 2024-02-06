@@ -11,7 +11,7 @@ function App() {
     <Router>
       <Routes>
       <Route
-          path="/"
+          path="/login"
           element={<Login />}
         />
         <Route
