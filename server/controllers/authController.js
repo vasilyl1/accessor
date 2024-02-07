@@ -7,10 +7,17 @@ module.exports = {
         passport.use(new GoogleStrategy({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `http://localhost:${PORT}/api/auth/google/callback`
+            callbackURL: `http://localhost:${PORT}/api/auth/google/callback`,
+            userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo', // Required for email
+            scope: ['profile', 'email'], // Specify scope to fetch profile and email
         },
             function (accessToken, refreshToken, profile, cb) {
-                User.findOrCreate({ googleId: profile.id }, function (err, user) {
+                const { id, emails } = profile;
+                const user = {
+                    googleId: id,
+                    email: emails && emails.length > 0 ? emails[0].value : null, // Access email from profile
+                };
+                User.findOrCreate({ googleId: id }, user, function (err, user) {
                     return cb(err, user);
                 });
             }

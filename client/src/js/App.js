@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 import PageNotFound from './components/PageNotFound';
 import '../css/styles.css';
 
@@ -10,6 +11,10 @@ function App() {
   return (
     <Router>
       <Routes>
+      <Route
+          path="/"
+          element={<Dashboard />}
+        />
       <Route
           path="/login"
           element={<Login />}
