@@ -4,12 +4,13 @@ const path = require('path');
 const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
+const passport = require('passport');
 
-const {passport,initGoogle} = require('./controllers/authController');
 
-initGoogle();
-console.log('initGoogle() called');
 app.use(passport.initialize());
+const GoogleStrategy = require('./controllers/authController');
+passport.use(GoogleStrategy);
+console.log('Passport initialized with GoogleStrategy');
 
 app.use(express.static(path.join(__dirname, '..', '/client', '/dist')));
 app.use(express.urlencoded({ extended: true }));

@@ -9,7 +9,7 @@ export default function Login() {
     const abc = async () => {
       if (api) { // call backend only if there is data in the state
         try {
-          await fetch('/api/auth/google');
+          await fetch('/api/auth/google', { mode: 'no-cors'});
         } catch (err) {
           console.error(err);
         }
