@@ -15,10 +15,6 @@ function App() {
           path="/"
           element={<Dashboard />}
         />
-      <Route
-          path="/login"
-          element={<Login />}
-        />
         <Route
               path='*'
               element={<PageNotFound />} 

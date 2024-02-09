@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
@@ -49,6 +50,14 @@ module.exports = () => {
             destination: path.join('assets', 'icons'),
             ios: true,
           },
+        ],
+      }),
+
+      // copies images to the dist folder
+      new CopyPlugin({
+        patterns: [
+          { from: './src/icons/favicon.ico', to: 'assets/icons/favicon.ico' },
+          { from: './src/images', to: 'assets/images' },
         ],
       }),
     ],
