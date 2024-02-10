@@ -1,16 +1,14 @@
 const router = require('express').Router();
 const passport = require('passport');
+const { isAuthenticated } = require('../utils/auth');
 
 // /api/auth/google
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // /api/auth/google/callback
 router.get('/auth/google/callback',
-    passport.authenticate('google', {failureRedirect: '/login', failureMessage: true }),
-    function(req, res) {
-        res.redirect('/');
-      }
-      );
+    passport.authenticate('google', {successReturnToOrRedirect: '/', failureRedirect: '/login', failureMessage: true })
+);
     // failure message can be retreived from req.session.messages[0]
 
 // /api/auth/user - get user data

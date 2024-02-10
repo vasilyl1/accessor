@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { loginUser, logoutUser } from '../utils/api';
 
 const user = {
   name: '',
@@ -14,8 +13,8 @@ const navigation = [
   { name: 'Calendar', href: '#', current: false },
 ]
 const userNavigation = [
-  { name: 'Login', href: '' },
-  { name: 'Sign out', href: '' },
+  { name: 'Login', href: '/auth' },
+  { name: 'Sign out', href: '/logout' },
 ]
 
 function classNames(...classes) {
@@ -23,27 +22,6 @@ function classNames(...classes) {
 }
 
 export default function Dashboard() {
-  const [api, setApi] = useState(null);
-
-  useEffect(() => {
-    const abc = async () => {
-      if (api) {
-        if (api === 'Login') await loginUser();
-        else if (api === 'Sign out') await logoutUser();
-        setApi(null);
-      };
-    };
-    abc();
-  }, [api]);
-
-  const handleClick = (e) => {
-    // Preventing the default behavior of the form submit (which is to refresh the page)
-    e.preventDefault();
-
-    // triggering the change of state in order to call the backend
-    setApi(e.target.getAttribute('name'));
-    
-  };
 
   return (
     <>
@@ -128,8 +106,8 @@ export default function Dashboard() {
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
                                     )}
-                                    name={item.name}
-                                    onClick={handleClick}
+                                    /*name={item.name}
+                                    onClick={handleClick}*/
                                   >
                                     {item.name}
                                   </a>
@@ -198,8 +176,8 @@ export default function Dashboard() {
                         as="a"
                         href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                        name={item.name}
-                        onClick={handleClick}
+                        /*name={item.name}
+                        onClick={handleClick}*/
                       >
                         {item.name}
                       </Disclosure.Button>

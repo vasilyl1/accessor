@@ -3,7 +3,7 @@ export const loginUser = async () => {
     try {
         await fetch('/api/auth/google',
             {
-                mode: 'no-cors',
+                //mode: 'no-cors',
             });
             console.log('attempted to log in');
     } catch (err) {

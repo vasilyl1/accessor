@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import PageNotFound from './components/PageNotFound';
+import {Auth, Logout} from './components/Auth';
 import '../css/styles.css';
 
 // In the main App component, only single instances of Header, Navigtion and Footer
@@ -11,13 +12,21 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route
+        <Route
           path="/"
           element={<Dashboard />}
         />
         <Route
-              path='*'
-              element={<PageNotFound />} 
+          path="/auth"
+          element={<Auth />}
+        />
+        <Route
+          path="/logout"
+          element={<Logout />}
+        />
+        <Route
+          path='*'
+          element={<PageNotFound />}
         />
       </Routes>
     </Router>
