@@ -6,7 +6,28 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 
 // /api/auth/google/callback
 router.get('/auth/google/callback',
-    passport.authenticate('google', { successReturnToOrRedirect: '/', failureRedirect: '/login1' }));
+    passport.authenticate('google', {failureRedirect: '/login', failureMessage: true }),
+    function(req, res) {
+        res.redirect('/');
+      }
+      );
+    // failure message can be retreived from req.session.messages[0]
+
+// /api/auth/user - get user data
+router.get('/auth/user', (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).send('No user is authenticated');
+    }
+    res.json(req.session.user); // https://www.passportjs.org/reference/normalized-profile/
+});
+
+// /api/auth/logout - logout user
+router.post('/auth/logout', (req, res, next) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+      });
+});
 
 // all other /api routes - send back 404
 
