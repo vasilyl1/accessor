@@ -24,12 +24,12 @@ module.exports = new GoogleStrategy({
             callbackURL: `http://localhost:3001/api/auth/google/callback`
         },
             function (accessToken, refreshToken, profile, cb) {
-                const { id, emails, name, picture } = profile;
+                const { id, emails, displayName, photos } = profile;
                 const user = {
                     googleId: id,
                     email: emails && emails.length > 0 ? emails[0].value : null, // Access email from profile
-                    username: name,
-                    picture: picture
+                    username: displayName,
+                    picture: photos && photos.length > 0 ? photos[0].value : null
                 };
                 if (!user.email) {
                     console.log('User profile does not have email field');
