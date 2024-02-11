@@ -40,7 +40,8 @@ module.exports = new GoogleStrategy({
                     return cb(new Error('Wrong user'), false);
                 }
                 else {
-                    console.log('User authenticated OK');
+                    //req.session.user = user;
+                    console.log(user);
                     return cb(null, user);
                 }
                 /*
