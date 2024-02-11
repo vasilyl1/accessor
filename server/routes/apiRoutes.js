@@ -1,7 +1,5 @@
 const router = require('express').Router();
 const passport = require('passport');
-const session = require('express-session');
-const { isAuthenticated } = require('../utils/auth');
 
 // /api/auth/google
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -12,7 +10,7 @@ router.get('/auth/google/callback',
 );
     // failure message can be retreived from req.session.messages[0]
 
-// /api/auth/user - get user data
+// /api/auth/profile - get user data
 router.get('/auth/profile', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({

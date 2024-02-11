@@ -3,11 +3,6 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const user = {
-  name: '',
-  email: '',
-  imageUrl: './assets/images/notLoggedInUser.png',
-}
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Calendar', href: '#', current: false },
@@ -22,6 +17,39 @@ function classNames(...classes) {
 }
 
 export default function Dashboard() {
+
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    imageUrl: './assets/images/notLoggedInUser.png',
+  });
+  
+
+  useEffect(() => { // call backend to update user profile
+    const abc = async () => {
+
+      try {
+        const loggedUser = await fetch('/api/auth/profile');
+        const data = await loggedUser.json();
+        (data.user) ? setUser({name:data.user.username, email:data.user.email, imageUrl:data.user.imageUrl}) : setUser({
+          name: '',
+          email: '',
+          imageUrl: './assets/images/notLoggedInUser.png',
+        });
+      } catch (err) {
+        console.error(err);
+      }
+
+    };
+    abc();
+    return () => { // cleanup after the component is unmounted
+      setUser({
+        name: '',
+        email: '',
+        imageUrl: './assets/images/notLoggedInUser.png',
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -106,8 +134,6 @@ export default function Dashboard() {
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
                                     )}
-                                    /*name={item.name}
-                                    onClick={handleClick}*/
                                   >
                                     {item.name}
                                   </a>
@@ -176,8 +202,6 @@ export default function Dashboard() {
                         as="a"
                         href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                        /*name={item.name}
-                        onClick={handleClick}*/
                       >
                         {item.name}
                       </Disclosure.Button>

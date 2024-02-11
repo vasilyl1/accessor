@@ -7,7 +7,8 @@ passport.serializeUser(function(user, cb) {
       return cb(null, {
         id: user.googleId,
         username: user.username,
-        picture: user.picture
+        imageUrl: user.imageUrl,
+        email: user.email
       });
     });
   });
@@ -29,7 +30,7 @@ module.exports = new GoogleStrategy({
                     googleId: id,
                     email: emails && emails.length > 0 ? emails[0].value : null, // Access email from profile
                     username: displayName,
-                    picture: photos && photos.length > 0 ? photos[0].value : null
+                    imageUrl: photos && photos.length > 0 ? photos[0].value : null
                 };
                 if (!user.email) {
                     console.log('User profile does not have email field');
