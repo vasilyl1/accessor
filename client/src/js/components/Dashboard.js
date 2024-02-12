@@ -12,6 +12,11 @@ const initialState = {
 
   userNavigation: [{ name: 'Login', href: '/auth' }],
 
+  notifications: [
+    { name: 'Your notifications will be displayed here', href: '#' },
+    { name: 'Please login', href: '/auth' }
+  ],
+
   loggedUser: dummyUser
 };
 
@@ -20,12 +25,12 @@ function reducer(state, action) {
     case 'updateUser':
       return {
         ...state,
-        loggedUser: action.payload.loggedUser
+        loggedUser: action.payload
       };
     case 'updateUserNavigation':
       return {
         ...state,
-        userNavigation: action.payload.userNavigation
+        userNavigation: action.payload
       };
     default:
       return state;
@@ -48,21 +53,19 @@ export default function Dashboard() {
         const data = await loggedUser.json();
         if (data.user) { // update user profile if user has logged in
           dispatch({
-            type: 'updateUser', payload: {
-              loggedUser: { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl }
-            }
+            type: 'updateUser', payload:
+              { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl }
+
           });
           dispatch({
-            type: 'updateUserNavigation', payload: {
-              userNavigation: [{ name: 'Sign out', href: '/logout' }]
-            }
+            type: 'updateUserNavigation', payload: [{ name: 'Sign out', href: '/logout' }]
+
           });
         } else {
-          dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
+          dispatch({ type: 'updateUser', payload: dummyUser });
           dispatch({
-            type: 'updateUserNavigation', payload: {
-              userNavigation: [{ name: 'Login', href: '/auth' }]
-            }
+            type: 'updateUserNavigation', payload: [{ name: 'Login', href: '/auth' }]
+
           });
         };
       } catch (err) {
@@ -72,11 +75,10 @@ export default function Dashboard() {
     };
     abc();
     return () => { // cleanup after the component is unmounted
-      dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
+      dispatch({ type: 'updateUser', payload: dummyUser });
       dispatch({
-        type: 'updateUserNavigation', payload: {
-          userNavigation: [{ name: 'Login', href: '/auth' }]
-        }
+        type: 'updateUserNavigation', payload: [{ name: 'Login', href: '/auth' }]
+
       });
     }
   }, []);
@@ -119,14 +121,47 @@ export default function Dashboard() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      <button
-                        type="button"
-                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                      >
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+
+                      {/* Notifications dropdown */}
+                      <Menu as="div" className="relative ml-3">
+                        <div>
+                          <Menu.Button
+                            type="button"
+                            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          >
+                            <span className="absolute -inset-1.5" />
+                            <span className="sr-only">View notifications</span>
+                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+                          </Menu.Button>
+                        </div>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            {state.notifications.map((item) => (
+                              <Menu.Item key={item.name}>
+                                {({ active }) => (
+                                  <a
+                                    href={item.href}
+                                    className={classNames(
+                                      active ? 'bg-gray-100' : '',
+                                      'block px-4 py-2 text-sm text-gray-700'
+                                    )}
+                                  >
+                                    {item.name}
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            ))}
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="relative ml-3">
@@ -216,6 +251,48 @@ export default function Dashboard() {
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
+
+                    {/* Notifications dropdown 
+                    <Menu as="div" className="relative ml-3">
+                      <div>
+                        <Menu.Button
+                          type="button"
+                          className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        >
+                          <span className="absolute -inset-1.5" />
+                          <span className="sr-only">View notifications</span>
+                          <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          {state.notifications.map((item) => (
+                            <Menu.Item key={item.name}>
+                              {({ active }) => (
+                                <a
+                                  href={item.href}
+                                  className={classNames(
+                                    active ? 'bg-gray-100' : '',
+                                    'block px-4 py-2 text-sm text-gray-700'
+                                  )}
+                                >
+                                  {item.name}
+                                </a>
+                              )}
+                            </Menu.Item>
+                          ))}
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>*/}
+
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {state.userNavigation.map((item) => (
