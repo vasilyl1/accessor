@@ -1,16 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Calendar', href: '#', current: false },
-]
-const userNavigation = [
-  { name: 'Login', href: '/auth' },
-  { name: 'Sign out', href: '/logout' },
-]
+const initialState = {
+  navigation: [
+    { name: 'Dashboard', href: '#', current: true },
+    { name: 'Calendar', href: '#', current: false },
+  ],
+  userNavigation: [
+    { name: 'Login', href: '/auth' },
+    { name: 'Sign out', href: '/logout' },
+  ],
+
+  loggedUser: dummyUser
+};
+
+const dummyUser = { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'updateUser':
+      return {
+        ...state,
+        loggedUser: action.payload
+      };
+    default:
+      return state;
+  }
+};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -18,12 +36,9 @@ function classNames(...classes) {
 
 export default function Dashboard() {
 
-  const [user, setUser] = useState({
-    name: '',
-    email: '',
-    imageUrl: './assets/images/notLoggedInUser.png',
-  });
-  
+  const [user, setUser] = useState(notLoggedInUser); // state to hold logged in user data
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => { // call backend to update user profile
     const abc = async () => {
@@ -31,11 +46,11 @@ export default function Dashboard() {
       try {
         const loggedUser = await fetch('/api/auth/profile');
         const data = await loggedUser.json();
-        (data.user) ? setUser({name:data.user.username, email:data.user.email, imageUrl:data.user.imageUrl}) : setUser({
-          name: '',
-          email: '',
-          imageUrl: './assets/images/notLoggedInUser.png',
-        });
+        (data.user)
+          ? dispatch({ type: 'updateUser', payload: { loggedUser: { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl } } })
+          : dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
+        //? setUser({ name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl })
+        //: setUser(notLoggedInUser);
       } catch (err) {
         console.error(err);
       }
@@ -43,11 +58,12 @@ export default function Dashboard() {
     };
     abc();
     return () => { // cleanup after the component is unmounted
-      setUser({
-        name: '',
-        email: '',
-        imageUrl: './assets/images/notLoggedInUser.png',
-      });
+      dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
+      //setUser({
+      //  name: '',
+      //  email: '',
+      //  imageUrl: './assets/images/notLoggedInUser.png',
+      //});
     }
   }, []);
 
@@ -77,7 +93,7 @@ export default function Dashboard() {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
+                        {state.navigation.map((item) => (
                           <a
                             key={item.name}
                             href={item.href}
@@ -112,7 +128,7 @@ export default function Dashboard() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                            <img className="h-8 w-8 rounded-full" src={state.loggedUser.imageUrl} alt="" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -125,7 +141,7 @@ export default function Dashboard() {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
+                            {state.userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <a
@@ -162,7 +178,7 @@ export default function Dashboard() {
 
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                  {navigation.map((item) => (
+                  {state.navigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
                       as="a"
@@ -180,11 +196,11 @@ export default function Dashboard() {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <img className="h-10 w-10 rounded-full" src={state.loggedUser.imageUrl} alt="" />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">{state.loggedUser.name}</div>
+                      <div className="text-sm font-medium leading-none text-gray-400">{state.loggedUser.email}</div>
                     </div>
                     <button
                       type="button"
@@ -196,7 +212,7 @@ export default function Dashboard() {
                     </button>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
-                    {userNavigation.map((item) => (
+                    {state.userNavigation.map((item) => (
                       <Disclosure.Button
                         key={item.name}
                         as="a"
