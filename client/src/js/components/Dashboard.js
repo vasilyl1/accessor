@@ -73,6 +73,11 @@ export default function Dashboard() {
     abc();
     return () => { // cleanup after the component is unmounted
       dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
+      dispatch({
+        type: 'updateUserNavigation', payload: {
+          userNavigation: [{ name: 'Login', href: '/auth' }]
+        }
+      });
     }
   }, []);
 
