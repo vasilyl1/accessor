@@ -22,7 +22,6 @@ app.use(session(sess));
 app.use(passport.initialize());
 passport.use(GoogleStrategy);
 app.use(passport.authenticate('session')); // this is authorized login session
-console.log('Passport initialized with GoogleStrategy');
 
 app.use(routes);
 

@@ -1,29 +1,31 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { Fragment } from 'react'
+import React, { useState, useEffect, useReducer, Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
+const dummyUser = { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' };
 
 const initialState = {
   navigation: [
     { name: 'Dashboard', href: '#', current: true },
     { name: 'Calendar', href: '#', current: false },
   ],
-  userNavigation: [
-    { name: 'Login', href: '/auth' },
-    { name: 'Sign out', href: '/logout' },
-  ],
+
+  userNavigation: [{ name: 'Login', href: '/auth' }],
 
   loggedUser: dummyUser
 };
-
-const dummyUser = { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' };
 
 function reducer(state, action) {
   switch (action.type) {
     case 'updateUser':
       return {
         ...state,
-        loggedUser: action.payload
+        loggedUser: action.payload.loggedUser
+      };
+    case 'updateUserNavigation':
+      return {
+        ...state,
+        userNavigation: action.payload.userNavigation
       };
     default:
       return state;
@@ -36,8 +38,6 @@ function classNames(...classes) {
 
 export default function Dashboard() {
 
-  const [user, setUser] = useState(notLoggedInUser); // state to hold logged in user data
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => { // call backend to update user profile
@@ -46,11 +46,25 @@ export default function Dashboard() {
       try {
         const loggedUser = await fetch('/api/auth/profile');
         const data = await loggedUser.json();
-        (data.user)
-          ? dispatch({ type: 'updateUser', payload: { loggedUser: { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl } } })
-          : dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
-        //? setUser({ name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl })
-        //: setUser(notLoggedInUser);
+        if (data.user) { // update user profile if user has logged in
+          dispatch({
+            type: 'updateUser', payload: {
+              loggedUser: { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl }
+            }
+          });
+          dispatch({
+            type: 'updateUserNavigation', payload: {
+              userNavigation: [{ name: 'Sign out', href: '/logout' }]
+            }
+          });
+        } else {
+          dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
+          dispatch({
+            type: 'updateUserNavigation', payload: {
+              userNavigation: [{ name: 'Login', href: '/auth' }]
+            }
+          });
+        };
       } catch (err) {
         console.error(err);
       }
@@ -59,24 +73,11 @@ export default function Dashboard() {
     abc();
     return () => { // cleanup after the component is unmounted
       dispatch({ type: 'updateUser', payload: { loggedUser: dummyUser } });
-      //setUser({
-      //  name: '',
-      //  email: '',
-      //  imageUrl: './assets/images/notLoggedInUser.png',
-      //});
     }
   }, []);
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
@@ -88,7 +89,7 @@ export default function Dashboard() {
                       <img
                         className="h-8 w-8 rounded-full"
                         src='./assets/images/brain-icon.png'
-                        alt="Your Company"
+                        alt="Company"
                       />
                     </div>
                     <div className="hidden md:block">
