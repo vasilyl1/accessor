@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useReducer, Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import {Dialog} from './Dialog';
+import { Dialog } from './Dialog';
+import { Notifications } from './Utils';
 
 const dummyUser = { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' };
 
@@ -132,7 +133,10 @@ export default function Dashboard() {
                           >
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">View notifications</span>
-                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+
+                            {/* Notifications icon */}
+                            <Notifications length={state.notifications.length} />
+
                           </Menu.Button>
                         </div>
                         <Transition
@@ -255,7 +259,8 @@ export default function Dashboard() {
                           >
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">View notifications</span>
-                            <BellIcon className="h-6 w-6" aria-hidden="true" />
+                             {/* Notifications icon */}
+                             <Notifications length={state.notifications.length} />
                           </Disclosure.Button>
 
                           <Disclosure.Panel>
