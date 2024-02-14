@@ -6,7 +6,7 @@ const app = express();
 const session = require('express-session');
 const PORT = process.env.PORT || 3001;
 const passport = require('passport');
-const GoogleStrategy = require('./controllers/authController');
+const { Googlestrategy } = require('./controllers/authController');
 const sess =
 {
   secret: 'keyboard cat and dog',
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session(sess));
 app.use(passport.initialize());
-passport.use(GoogleStrategy);
+passport.use(Googlestrategy);
 app.use(passport.authenticate('session')); // this is authorized login session
 
 app.use(routes);

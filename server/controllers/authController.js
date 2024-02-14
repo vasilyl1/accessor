@@ -19,7 +19,7 @@ passport.serializeUser(function(user, cb) {
     });
   });
 
-module.exports = new GoogleStrategy({
+  const Googlestrategy  = new GoogleStrategy({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: `http://localhost:3001/api/auth/google/callback`
@@ -50,3 +50,11 @@ module.exports = new GoogleStrategy({
                 */
             }
         );
+
+        const withAuth = (req, res, next) => { // Middleware function to check if the user is authenticated
+            // Passport adds a `user` object to the request if authentication succeeds
+            if (req.isAuthenticated()) next(); else res.status(401).json({ message: 'Unauthorized' });
+        };
+        
+
+        module.exports = {Googlestrategy, withAuth};
