@@ -1,43 +1,11 @@
-import React, { useState, useEffect, useReducer, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
+import { useAccessorState } from '../utils/context';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog } from './Dialog';
-import { Notifications } from './Utils';
+import { Notifications } from './DashboardComponents';
+import { updateUser,updateUserNavigation } from '../utils/actions';
 
-const dummyUser = { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' };
-
-const initialState = {
-  navigation: [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Calendar', href: '#', current: false },
-  ],
-
-  userNavigation: [{ name: 'Login', href: '/auth' }],
-
-  notifications: [
-    { name: 'Your notifications will be displayed here', href: '#' },
-    { name: 'Please login', href: '/auth' }
-  ],
-
-  loggedUser: dummyUser
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'updateUser':
-      return {
-        ...state,
-        loggedUser: action.payload
-      };
-    case 'updateUserNavigation':
-      return {
-        ...state,
-        userNavigation: action.payload
-      };
-    default:
-      return state;
-  }
-};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -45,7 +13,7 @@ function classNames(...classes) {
 
 export default function Dashboard() {
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useAccessorState(); // access global state and dispatch function
 
   useEffect(() => { // call backend to update user profile
     const abc = async () => {
@@ -55,18 +23,18 @@ export default function Dashboard() {
         const data = await loggedUser.json();
         if (data.user) { // update user profile if user has logged in
           dispatch({
-            type: 'updateUser', payload:
+            type: updateUser, payload:
               { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl }
 
           });
           dispatch({
-            type: 'updateUserNavigation', payload: [{ name: 'Sign out', href: '/logout' }]
+            type: updateUserNavigation, payload: [{ name: 'Sign out', href: '/logout' }]
 
           });
         } else {
-          dispatch({ type: 'updateUser', payload: dummyUser });
+          dispatch({ type: updateUser, payload: state.dummyUser });
           dispatch({
-            type: 'updateUserNavigation', payload: [{ name: 'Login', href: '/auth' }]
+            type: updateUserNavigation, payload: [{ name: 'Login', href: '/auth' }]
 
           });
         };
@@ -77,9 +45,9 @@ export default function Dashboard() {
     };
     abc();
     return () => { // cleanup after the component is unmounted
-      dispatch({ type: 'updateUser', payload: dummyUser });
+      dispatch({ type: updateUser, payload: state.dummyUser });
       dispatch({
-        type: 'updateUserNavigation', payload: [{ name: 'Login', href: '/auth' }]
+        type: updateUserNavigation, payload: [{ name: 'Login', href: '/auth' }]
 
       });
     }
@@ -259,8 +227,8 @@ export default function Dashboard() {
                           >
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">View notifications</span>
-                             {/* Notifications icon */}
-                             <Notifications length={state.notifications.length} />
+                            {/* Notifications icon */}
+                            <Notifications length={state.notifications.length} />
                           </Disclosure.Button>
 
                           <Disclosure.Panel>
