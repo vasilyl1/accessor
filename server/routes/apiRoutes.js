@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const { withAuth } = require('../controllers/authController');
+const { chat } = require('../controllers/openaiController');
 
 // /api/auth/google
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -16,6 +17,7 @@ router.get('/auth/profile', withAuth, (req, res) => {
     res.json({ user: req.user }); // req.user contains information about the logged-in user
 });
 
+
 // /api/auth/logout - logout user
 router.post('/auth/logout', (req, res, next) => {
     req.logout(function (err) {
@@ -24,9 +26,19 @@ router.post('/auth/logout', (req, res, next) => {
     });
 });
 
+// /api/openai/chat - chat completions from OpenAI
+router.post('/openai/chat', withAuth, async (req, res) => {
+    try {
+        const response = await chat(req.body.prompt);
+        res.json({ response:response });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+});
+
 // all other /api routes - send back 404
 
-router.get('*', function (req, res) {
+router.all('*', function (req, res) {
     res.status(404).send('404 Not Found');
     res.render('Error 404');
 });

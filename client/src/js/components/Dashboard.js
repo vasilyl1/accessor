@@ -2,8 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import { useAccessorState } from '../utils/context';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { Dialog } from './Dialog';
-import { Notifications } from './DashboardComponents';
+import { Notifications, Dialog } from './DashboardComponents';
 import { updateUser,updateUserNavigation } from '../utils/actions';
 
 
