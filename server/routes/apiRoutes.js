@@ -8,7 +8,7 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 
 // /api/auth/google/callback
 router.get('/auth/google/callback',
-    passport.authenticate('google', { successReturnToOrRedirect: '/', failureRedirect: '/login', failureMessage: true })
+    passport.authenticate('google', { successReturnToOrRedirect: '/', failureRedirect: '/notauthorized', failureMessage: true })
 );
 // failure message can be retreived from req.session.messages[0]
 

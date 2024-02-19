@@ -19,7 +19,6 @@ export const AccessorStateProvider = ({ children }) => {
           userNavigation: [{ name: 'Login', href: '/auth' }],
         
           notifications: [
-            { name: 'Your notifications will be displayed here', href: '#' },
             { name: 'Please login', href: '/auth' }
           ],
         

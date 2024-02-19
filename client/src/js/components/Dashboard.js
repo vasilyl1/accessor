@@ -3,7 +3,7 @@ import { useAccessorState } from '../utils/context';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Notifications, Dialog } from './DashboardComponents';
-import { updateUser,updateUserNavigation } from '../utils/actions';
+import { updateUser,updateUserNavigation, updateUserNotifications } from '../utils/actions';
 
 
 function classNames(...classes) {
@@ -30,10 +30,12 @@ export default function Dashboard() {
             type: updateUserNavigation, payload: [{ name: 'Sign out', href: '/logout' }]
 
           });
-        } else {
-          dispatch({ type: updateUser, payload: state.dummyUser });
           dispatch({
-            type: updateUserNavigation, payload: [{ name: 'Login', href: '/auth' }]
+            type: updateUserNotifications, payload: 
+            [
+              { name: `${data.user.username} notifications will be displayed here`, href: '#' },
+              { name: 'You can log out', href: '/logout' }
+            ]
 
           });
         };
@@ -43,13 +45,6 @@ export default function Dashboard() {
 
     };
     abc();
-    return () => { // cleanup after the component is unmounted
-      dispatch({ type: updateUser, payload: state.dummyUser });
-      dispatch({
-        type: updateUserNavigation, payload: [{ name: 'Login', href: '/auth' }]
-
-      });
-    }
   }, []);
 
   return (

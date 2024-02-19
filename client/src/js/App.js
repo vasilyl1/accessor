@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import PageNotFound from './components/PageNotFound';
+import UnAuthorized from './components/UnAuthorized';
 import {Auth, Logout} from './components/Auth';
 import '../css/styles.css';
 import { AccessorStateProvider } from './utils/context';
@@ -25,6 +26,10 @@ function App() {
         <Route
           path="/logout"
           element={<Logout />}
+        />
+         <Route
+          path="/notauthorized"
+          element={<UnAuthorized />}
         />
         <Route
           path='*'

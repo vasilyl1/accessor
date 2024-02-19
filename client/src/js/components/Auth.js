@@ -1,6 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import { useAccessorState } from '../utils/context';
+import { updateUser, updateUserNavigation, updateUserNotifications } from '../utils/actions';
 
-export function Auth ()  {
+export function Auth() {
     useEffect(() => {
         // Submit the form programmatically when the component mounts
         document.getElementById('googleAuthForm').submit();
@@ -9,14 +11,29 @@ export function Auth ()  {
     return (
         <div>
             <form id="googleAuthForm" action="/api/auth/google" method="get">
-               <input type="submit" value="Redirecting for authorization" />
+                <input type="submit" value="Redirecting for authorization" />
             </form>
         </div>
     );
 }
 
-export function Logout () {
+export function Logout() {
+    const { state, dispatch } = useAccessorState(); // access global state and dispatch function
     useEffect(() => {
+
+        // update user profile with dummy user
+        dispatch({ type: updateUser, payload: state.dummyUser });
+        dispatch({
+            type: updateUserNavigation, payload: [{ name: 'Login', href: '/auth' }]
+
+        });
+        dispatch({
+            type: updateUserNotifications, payload:
+                [
+                    { name: 'Please login', href: '/auth' }
+                ]
+        });
+
         // Submit the form programmatically when the component mounts
         document.getElementById('googleLogoutForm').submit();
     }, []);
@@ -24,7 +41,7 @@ export function Logout () {
     return (
         <div>
             <form id="googleLogoutForm" action="/api/auth/logout" method="post">
-               <input type="submit" value="Redirecting for logout" />
+                <input type="submit" value="Redirecting for logout" />
             </form>
         </div>
     );
