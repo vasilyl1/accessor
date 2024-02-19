@@ -19,6 +19,13 @@ passport.serializeUser(function(user, cb) {
     });
   });
 
+  const checkUser = (req) => { // returns true if the user is authenticated
+    const emails = process.env.EMAIL.split(',');
+    const upcaseEmails = emails.map(email => email.trim().toUpperCase());
+    const upcaseReq = req.trim().toUpperCase();
+    if (upcaseEmails.find(email => email === upcaseReq)) return true; else return false;
+  };
+
   const Googlestrategy  = new GoogleStrategy({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -32,17 +39,9 @@ passport.serializeUser(function(user, cb) {
                     username: displayName,
                     imageUrl: photos && photos.length > 0 ? photos[0].value : null
                 };
-                if (!user.email) {
-                    console.log('User profile does not have email field');
-                    return cb(new Error('No email found'), false);
-                }
-                else if (!(user.email == process.env.EMAIL)) {
-                    console.log('User email does not match the one in .env file');
-                    return cb(new Error('Wrong user'), false);
-                }
-                else {
-                    return cb(null, user);
-                }
+                if (!user.email) return cb(null, false); // no email
+                else if (!checkUser(user.email)) return cb(null, false); // wrong email
+                else return cb(null, user);
                 /*
                 User.findOrCreate({ googleId: id }, user, function (err, user) {
                     return cb(err, user);

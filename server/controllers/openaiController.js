@@ -1,7 +1,7 @@
 const { OpenAI } = require('openai');
 require('dotenv').config();
 
-const client = new OpenAI({ apiKey: process.env.OPENAI, timeout: 10000, organizaion: process.env.OPENAI_ORG});
+const client = new OpenAI({ apiKey: process.env.OPENAI});
 
 async function chat(prompt) {
   let placeholder =
