@@ -9,11 +9,9 @@ export function Auth() {
     }, []);
 
     return (
-        <div>
             <form id="googleAuthForm" action="/api/auth/google" method="get">
                 <input type="submit" value="Redirecting for authorization" />
             </form>
-        </div>
     );
 }
 
@@ -39,10 +37,8 @@ export function Logout() {
     }, []);
 
     return (
-        <div>
             <form id="googleLogoutForm" action="/api/auth/logout" method="post">
                 <input type="submit" value="Redirecting for logout" />
             </form>
-        </div>
     );
 }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import PageNotFound from './components/PageNotFound';
 import UnAuthorized from './components/UnAuthorized';
+import Offline from './components/Offline';
 import {Auth, Logout} from './components/Auth';
 import '../css/styles.css';
 import { AccessorStateProvider } from './utils/context';
@@ -30,6 +31,10 @@ function App() {
          <Route
           path="/notauthorized"
           element={<UnAuthorized />}
+        />
+        <Route
+          path="/offline"
+          element={<Offline />}
         />
         <Route
           path='*'
