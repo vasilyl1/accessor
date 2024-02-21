@@ -40,7 +40,7 @@ export default function Dashboard() {
           });
         };
       } catch (err) {
-        console.error(err);
+        //console.error(err);
       }
 
     };

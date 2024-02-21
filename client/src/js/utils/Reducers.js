@@ -1,4 +1,9 @@
-import { updateUser, updateUserNavigation, updateUserNotifications } from "./actions";
+import { 
+    updateUser, 
+    updateUserNavigation, 
+    updateUserNotifications,
+    updateAiError
+} from "./actions";
 
 export function reducer(state, action) {
     switch (action.type) {
@@ -16,6 +21,11 @@ export function reducer(state, action) {
             return {
                 ...state,
                 notifications: action.payload
+            };
+        case updateAiError:
+            return {
+                ...state,
+                aiError: action.payload
             };
         default:
             return state;

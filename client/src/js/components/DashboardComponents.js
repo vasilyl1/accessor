@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BellIcon } from '@heroicons/react/24/outline';
+import { Overlay } from '../utils/overlay';
+import { useAccessorState } from '../utils/context';
 
 export function Notifications({ length }) {
     return (
@@ -18,6 +20,8 @@ export function Notifications({ length }) {
 
 export function Dialog() {
 
+    const { state, dispatch } = useAccessorState(); // access global state and dispatch function
+
     // this state is used to save validated json data to be sent to the backend
     const [api, setApi] = useState(null);
     const [apiResponse, setApiResponse] = useState('Default value for api response.');
@@ -34,8 +38,8 @@ export function Dialog() {
                     });
                     const response = await res.json();
                     setApiResponse(response.response);
-                } catch (err) {
-                    console.error(err);
+                } catch (err) { // if the server returning error for whatever reason inform the user
+                    dispatch({ type: 'updateAiError', payload: 'AI response error. Check if you are logged in and if the internet is up.' });
                 }
                 setApi(null);
             }
@@ -45,13 +49,13 @@ export function Dialog() {
 
     const handleClick = (e) => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
-        e.preventDefault();
+        //e.preventDefault();
 
         const promptData = document.getElementById('prompt');
-        setApi({prompt: promptData.value});
+        setApi({ prompt: promptData.value });
         promptData.value = '';
-    
-      };
+
+    };
 
     return (
 
@@ -59,10 +63,12 @@ export function Dialog() {
             <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
 
+                    {state.aiError && <Overlay />}
+
                     <div className="px-4 py-6 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900 sm:col-span-1">About</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                           {apiResponse}
+                            {apiResponse}
                         </dd>
                     </div>
 

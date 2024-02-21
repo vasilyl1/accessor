@@ -13,7 +13,7 @@ const adminRoutes = ['/auth', '/api', '/logout'];
 // The precacheAndRoute() method takes an array of URLs to precache. The self._WB_MANIFEST is an array that contains the list of URLs to precache.
 precacheAndRoute(
   self.__WB_MANIFEST.concat([
-    { url: '/unauthorized', revision: null }, // url for failed authorization to be precached - static page
+    { url: '/notauthorized', revision: null }, // url for failed authorization to be precached - static page
     { url: '/offline', revision: null } // url for 307 internet offline to be precached - static page
   ])
 );
@@ -36,7 +36,8 @@ registerRoute(
 
 
 // Fallback to a specific cached route for network requests when network is unavailable
-
 self.addEventListener('fetch', (event) => {
-    event.respondWith(fetch(event.request).catch(() => { return Response.redirect('/offline'); }))
-  });
+  event.respondWith(fetch(event.request).catch(() => { return Response.redirect('/offline'); }))
+});
+
+

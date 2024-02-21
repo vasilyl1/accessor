@@ -24,7 +24,9 @@ export const AccessorStateProvider = ({ children }) => {
         
           loggedUser: { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' },
 
-          dummyUser : { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' }
+          dummyUser : { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' },
+
+          aiError : null
     };
 
     // useReducer hook to manage state with the reducer function
