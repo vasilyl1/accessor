@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { reducer } from './reducers';
+import { reducer } from './Reducers';
 
 // initialize the context for the current user
 const AccessorStateContext = createContext();

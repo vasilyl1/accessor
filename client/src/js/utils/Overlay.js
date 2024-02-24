@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useAccessorState } from './context';
+import { useAccessorState } from './Context';
 
 export function Overlay() {
     const [open, setOpen] = useState(true);
