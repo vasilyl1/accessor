@@ -3,7 +3,7 @@ import {
     updateUserNavigation, 
     updateUserNotifications,
     updateAiError
-} from "./actions";
+} from "./Actions";
 
 export function reducer(state, action) {
     switch (action.type) {
