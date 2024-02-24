@@ -1,9 +1,9 @@
 import React, { useEffect, Fragment } from 'react';
-import { useAccessorState } from '../utils/context';
+import { useAccessorState } from '../utils/Context';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Notifications, Dialog } from './DashboardComponents';
-import { updateUser,updateUserNavigation, updateUserNotifications } from '../utils/actions';
+import { updateUser,updateUserNavigation, updateUserNotifications } from '../utils/Actions';
 
 
 function classNames(...classes) {

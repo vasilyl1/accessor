@@ -7,7 +7,7 @@ import UnAuthorized from './components/UnAuthorized';
 import Offline from './components/Offline';
 import {Auth, Logout} from './components/Auth';
 import '../css/styles.css';
-import { AccessorStateProvider } from './utils/context';
+import { AccessorStateProvider } from './utils/Context';
 
 // In the main App component, only single instances of Header, Navigtion and Footer
 //  are rendered and several instances of Project
