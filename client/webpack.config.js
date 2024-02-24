@@ -47,7 +47,7 @@ module.exports = () => {
           {
             src: path.resolve('./src/icons/brain-icon.png'),
             sizes: [16, 32, 48, 96, 128, 180, 192, 256, 384, 512],
-            destination: path.join('assets', 'icons'),
+            destination: path.join('assets/', 'icons/'),
             ios: true,
           },
         ],
