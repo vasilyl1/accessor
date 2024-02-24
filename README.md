@@ -14,7 +14,7 @@ PassportJS with Google strategy is implemented for authorization.
 The authorization protocol follows Oauth standard with the server call back URL, once the user is authenticated by Google, the application gets an access to the user profile and performs the check against the user emails list authorized to access the service. 
 Secure Express sessions are used to handle requests to the  express server protected API routes.
 Service Worker is used to cache the browser requests for faster response. Stale while revalidate workbox strategy is used to refresh the content if the application is connected to the Internet.
-For offline application work, the folliwing failovers are implemented:
+For offline application work, the following failovers are implemented:
 * the redirect to the cached network offline error page happens for any OpenAI request;
 * the redirect to the cached unauthorized offline error page happens for any Google authenticated user whose email is not the part of the service subscribers list
 * the redirect to the cached REACT component within the client routing for any unrecognized client routes
@@ -54,6 +54,8 @@ Below screeshots are demonstrating an offline functionality of the application w
 + Google
 + Google Chrome
 + PWA
++ Webpack
++ Workbox
 + OpenAI
 + Express
 + REACT
