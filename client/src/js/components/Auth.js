@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useAccessorState } from '../utils/context';
-import { updateUser, updateUserNavigation, updateUserNotifications } from '../utils/actions';
+import { useAccessorState } from '../utils/Context';
+import { updateUser, updateUserNavigation, updateUserNotifications } from '../utils/Actions';
 
 export function Auth() {
     useEffect(() => {

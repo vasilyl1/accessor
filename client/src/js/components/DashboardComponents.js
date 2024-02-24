@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BellIcon } from '@heroicons/react/24/outline';
-import { Overlay } from '../utils/overlay';
-import { useAccessorState } from '../utils/context';
+import { Overlay } from '../utils/Overlay';
+import { useAccessorState } from '../utils/Context';
 
 export function Notifications({ length }) {
     return (
