@@ -29,7 +29,7 @@ const checkUser = (req) => { // returns true if the user is authenticated
 const Googlestrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://localhost:3001/api/auth/google/callback`
+    callbackURL: `/api/auth/google/callback`
 },
     function (accessToken, refreshToken, profile, cb) {
         const { id, emails, displayName, photos } = profile;
