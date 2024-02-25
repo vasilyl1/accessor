@@ -30,7 +30,7 @@ function App() {
         />
          <Route
           path="/notauthorized"
-          element={<UnAuthorized />}
+          element={<><UnAuthorized /></>}
         />
         <Route
           path="/offline"

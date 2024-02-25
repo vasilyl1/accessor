@@ -20,9 +20,17 @@ router.get('/auth/profile', withAuth, (req, res) => {
 
 // /api/auth/logout - logout user
 router.post('/auth/logout', (req, res, next) => {
+    res.clearCookie('connect.sid');
     req.logout(function (err) {
         if (err) { return next(err); }
-        res.redirect('/');
+        req.session.destroy((err) => {
+            if (err) {
+                console.log('Error destroying session:', err);
+                return next(err);
+            }
+            // Redirect to Google logout URL
+            res.redirect('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + req.protocol + '://' + req.get('host') + '/' + '&prompt=none');
+        });
     });
 });
 

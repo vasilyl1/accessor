@@ -30,10 +30,8 @@ const Googlestrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL:
-        process.env.GOOGLE_callbackURL 
-        ? process.env.GOOGLE_callbackURL 
-        : process.env.HEROKU_APP_NAME
-            ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/api/auth/google/callback`
+        process.env.GOOGLE_callbackURL
+            ? process.env.GOOGLE_callbackURL
             : `/api/auth/google/callback`
 },
     function (accessToken, refreshToken, profile, cb) {
