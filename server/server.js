@@ -12,7 +12,7 @@ const sess =
   secret: 'keyboard cat and dog',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true }
+  //cookie: { secure: true }
 }
 
 app.use(express.static(path.join(__dirname, '..', '/client', '/dist')));
