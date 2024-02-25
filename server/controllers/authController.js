@@ -29,7 +29,12 @@ const checkUser = (req) => { // returns true if the user is authenticated
 const Googlestrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `/api/auth/google/callback`
+    callbackURL:
+        process.env.GOOGLE_callbackURL 
+        ? process.env.GOOGLE_callbackURL 
+        : process.env.HEROKU_APP_NAME
+            ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/api/auth/google/callback`
+            : `/api/auth/google/callback`
 },
     function (accessToken, refreshToken, profile, cb) {
         const { id, emails, displayName, photos } = profile;
