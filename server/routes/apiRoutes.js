@@ -29,7 +29,7 @@ router.post('/auth/logout', (req, res, next) => {
                 return next(err);
             }
             // Redirect to Google logout URL
-            res.redirect('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + req.protocol + '://' + req.get('host') + '/' + '&prompt=none');
+            res.redirect('https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=' + req.protocol + '://' + req.get('host') + '/');
         });
     });
 });
