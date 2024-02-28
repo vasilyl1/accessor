@@ -1,15 +1,17 @@
 import React, { Fragment, useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { useAccessorState } from './Context';
+import { updateAiError } from '../utils/Actions';
 
 export function Overlay() {
     const [open, setOpen] = useState(true);
-    const { state, dispatch } = useAccessorState(); // access global state and dispatch function
+    const state = useSelector(state => state);
+    const dispatch = useDispatch();
     const okButtonRef = useRef(null);
 
     const onclickOK = () => {
-        dispatch({ type: 'updateAiError', payload: null });
+        dispatch(updateAiError( null ));
         setOpen(false);
     };
 

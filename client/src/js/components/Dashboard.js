@@ -1,9 +1,9 @@
 import React, { useEffect, Fragment } from 'react';
-import { useAccessorState } from '../utils/Context';
+import { useSelector, useDispatch } from 'react-redux';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Notifications, Dialog } from './DashboardComponents';
-import { updateUser,updateUserNavigation, updateUserNotifications } from '../utils/Actions';
+import { updateUser, updateUserNavigation, updateUserNotifications } from '../utils/Actions';
 
 
 function classNames(...classes) {
@@ -12,7 +12,8 @@ function classNames(...classes) {
 
 export default function Dashboard() {
 
-  const { state, dispatch } = useAccessorState(); // access global state and dispatch function
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
 
   useEffect(() => { // call backend to update user profile
     const abc = async () => {
@@ -21,28 +22,21 @@ export default function Dashboard() {
         const loggedUser = await fetch('/api/auth/profile');
         const data = await loggedUser.json();
         if (data.user) { // update user profile if user has logged in
-          dispatch({
-            type: updateUser, payload:
+          dispatch( updateUser(
               { name: data.user.username, email: data.user.email, imageUrl: data.user.imageUrl }
-
-          });
-          dispatch({
-            type: updateUserNavigation, payload: [{ name: 'Sign out', href: '/logout' }]
-
-          });
-          dispatch({
-            type: updateUserNotifications, payload: 
+          ));
+          dispatch( updateUserNavigation(
+            [{ name: 'Sign out', href: '/logout' }]
+          ));
+          dispatch( updateUserNotifications(
             [
               { name: `${data.user.username} notifications will be displayed here`, href: '#' },
               { name: 'You can log out', href: '/logout' }
             ]
-
-          });
+          ));
         };
       } catch (err) {
-        //console.error(err);
       }
-
     };
     abc();
   }, []);
