@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAccessorState } from '../utils/Context';
+import { useSelector, useDispatch } from 'react-redux';
 import { updateUser, updateUserNavigation, updateUserNotifications } from '../utils/Actions';
 
 export function Auth() {
@@ -16,21 +16,23 @@ export function Auth() {
 }
 
 export function Logout() {
-    const { state, dispatch } = useAccessorState(); // access global state and dispatch function
+    const state = useSelector(state => state);
+    const dispatch = useDispatch();
     useEffect(() => {
 
         // update user profile with dummy user
-        dispatch({ type: updateUser, payload: state.dummyUser });
-        dispatch({
-            type: updateUserNavigation, payload: [{ name: 'Login', href: '/auth' }]
+        dispatch( updateUser( state.dummyUser ));
+        dispatch(
+            updateUserNavigation( [{ name: 'Login', href: '/auth' }] )
 
-        });
-        dispatch({
-            type: updateUserNotifications, payload:
+        );
+        dispatch(
+            updateUserNotifications(
                 [
                     { name: 'Please login', href: '/auth' }
                 ]
-        });
+            )
+        );
 
         // Submit the form programmatically when the component mounts
         document.getElementById('googleLogoutForm').submit();

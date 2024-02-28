@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { Overlay } from '../utils/Overlay';
-import { useAccessorState } from '../utils/Context';
+import { updateAiError } from '../utils/Actions';
 
 export function Notifications({ length }) {
     return (
@@ -20,7 +21,9 @@ export function Notifications({ length }) {
 
 export function Dialog() {
 
-    const { state, dispatch } = useAccessorState(); // access global state and dispatch function
+    //const { state, dispatch } = useAccessorState(); // access global state and dispatch function
+    const state = useSelector(state => state);
+    const dispatch = useDispatch();
 
     // this state is used to save validated json data to be sent to the backend
     const [api, setApi] = useState(null);
@@ -39,7 +42,7 @@ export function Dialog() {
                     const response = await res.json();
                     setApiResponse(response.response);
                 } catch (err) { // if the server returning error for whatever reason inform the user
-                    dispatch({ type: 'updateAiError', payload: 'AI response error. Check if you are logged in and if the internet is up.' });
+                    dispatch( updateAiError('AI response error. Check if you are logged in and if the internet is up.'));
                 }
                 setApi(null);
             }

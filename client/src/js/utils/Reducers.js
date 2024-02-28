@@ -1,28 +1,43 @@
-import { 
-    updateUser, 
-    updateUserNavigation, 
-    updateUserNotifications,
-    updateAiError
-} from "./Actions";
 
-export function reducer(state, action) {
+
+const initialState = {
+
+    navigation: [
+        { name: 'Dashboard', href: '#', current: true },
+        { name: 'Calendar', href: '#', current: false },
+      ],
+    
+      userNavigation: [{ name: 'Login', href: '/auth' }],
+    
+      notifications: [
+        { name: 'Please login', href: '/auth' }
+      ],
+    
+      loggedUser: { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' },
+
+      dummyUser : { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' },
+
+      aiError : null
+};
+
+export function reducer (state = initialState, action) {
     switch (action.type) {
-        case updateUser:
+        case 'updateUser':
             return {
                 ...state,
                 loggedUser: action.payload
             };
-        case updateUserNavigation:
+        case 'updateUserNavigation':
             return {
                 ...state,
                 userNavigation: action.payload
             };
-        case updateUserNotifications:
+        case 'updateUserNotifications':
             return {
                 ...state,
                 notifications: action.payload
             };
-        case updateAiError:
+        case 'updateAiError':
             return {
                 ...state,
                 aiError: action.payload
