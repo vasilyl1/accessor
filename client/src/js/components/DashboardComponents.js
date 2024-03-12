@@ -27,13 +27,14 @@ export function Dialog() {
 
     // this state is used to save validated json data to be sent to the backend
     const [api, setApi] = useState(null);
-    const [apiResponse, setApiResponse] = useState('Default value for api response.');
+    const [apiResponse, setApiResponse] = useState('Ask anything typing in the prompt and click "Request" button.');
 
     // this hook will run every time the api state is updated. api state contains validated form data
     useEffect(() => {
         const abc = async () => {
             if (api) { // call backend only if there is data in the state
                 try {
+                    setApiResponse('getting response...');
                     const res = await fetch('/api/openai/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -88,7 +89,7 @@ export function Dialog() {
                                 defaultValue={''}
                             />
                         </div>
-                        <p className="mt-3 text-sm leading-6 text-gray-600">Enter prompt and click 'Submit' for AI model response.</p>
+                        <p className="mt-3 text-sm leading-6 text-gray-600">Input your prompt and click 'Request' to get AI model response.</p>
                     </div>
 
                     <div className="mt-6 flex items-center justify-end gap-x-6 pr-4">
