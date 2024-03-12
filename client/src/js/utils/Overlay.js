@@ -2,7 +2,7 @@ import React, { Fragment, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { updateAiError } from '../utils/Actions';
+import { updateAiError } from './Actions';
 
 export function Overlay() {
     const [open, setOpen] = useState(true);
