@@ -37,7 +37,7 @@ router.post('/auth/logout', (req, res, next) => {
 // /api/openai/chat - chat completions from OpenAI
 router.post('/openai/chat', withAuth, async (req, res) => {
     try {
-        //console.log(req.body);
+        console.log(req.body);
         const response = await chat(req.body);
         res.json({ response:response });
     } catch (error) {

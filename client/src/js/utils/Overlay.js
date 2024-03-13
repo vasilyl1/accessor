@@ -6,12 +6,12 @@ import { updateError } from './Actions';
 
 export function Overlay() {
     const [open, setOpen] = useState(true);
-    const state = useSelector(state => state);
+    const error = useSelector(state => state.error);
     const dispatch = useDispatch();
     const okButtonRef = useRef(null);
 
     const onclickOK = () => {
-        dispatch(updateError( null ));
+        dispatch(updateError( null, null ));
         setOpen(false);
     };
 
@@ -49,11 +49,11 @@ export function Overlay() {
                                         </div>
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                ERROR
+                                                {error.header}
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
-                                                    {state.error}
+                                                    {error.message}
                                                 </p>
                                             </div>
                                         </div>

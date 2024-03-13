@@ -17,7 +17,7 @@ const initialState = {
 
     dummyUser: { name: '', email: '', imageUrl: './assets/images/notLoggedInUser.png' },
 
-    error: null,
+    error: { header: null, message: null },
 
     conversation: {
         model: "gpt-3.5-turbo",
@@ -72,6 +72,11 @@ export function reducer(state = initialState, action) {
                         { "role": "assistant", "content": action.payload }
                     ]
                 }
+            };
+            case 'clearConversation':
+            return {
+                ...state,
+                conversation: initialState.conversation
             };
         default:
             return state;

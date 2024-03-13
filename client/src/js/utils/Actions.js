@@ -20,10 +20,10 @@ export const updateUserNotifications = (notifications) => {
     };
 };
 
-export const updateError = (message) => {
+export const updateError = (header,message) => {
     return {
         type: 'updateError',
-        payload: message
+        payload: {header: header, message: message}
     };
 };
 
@@ -38,5 +38,11 @@ export const addMessageAssistant = (message) => {
     return {
         type: 'addMessageAssistant',
         payload: message
+    };
+};
+
+export const clearConversation = () => {
+    return {
+        type: 'clearConversation'
     };
 };
