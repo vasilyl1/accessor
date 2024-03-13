@@ -37,7 +37,8 @@ router.post('/auth/logout', (req, res, next) => {
 // /api/openai/chat - chat completions from OpenAI
 router.post('/openai/chat', withAuth, async (req, res) => {
     try {
-        const response = await chat(req.body.prompt);
+        console.log(req.body);
+        const response = await chat(req.body);
         res.json({ response:response });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
@@ -48,7 +49,6 @@ router.post('/openai/chat', withAuth, async (req, res) => {
 
 router.all('*', function (req, res) {
     res.status(404).send('404 Not Found');
-    res.render('Error 404');
 });
 
 

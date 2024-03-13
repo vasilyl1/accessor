@@ -2,16 +2,16 @@ import React, { Fragment, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { updateAiError } from './Actions';
+import { updateError } from './Actions';
 
 export function Overlay() {
     const [open, setOpen] = useState(true);
-    const state = useSelector(state => state);
+    const error = useSelector(state => state.error);
     const dispatch = useDispatch();
     const okButtonRef = useRef(null);
 
     const onclickOK = () => {
-        dispatch(updateAiError( null ));
+        dispatch(updateError( null, null ));
         setOpen(false);
     };
 
@@ -49,11 +49,11 @@ export function Overlay() {
                                         </div>
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                                ERROR
+                                                {error.header}
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
-                                                    {state.aiError}
+                                                    {error.message}
                                                 </p>
                                             </div>
                                         </div>

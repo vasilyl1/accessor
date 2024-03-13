@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BellIcon } from '@heroicons/react/24/outline';
 import { Overlay } from '../utils/Overlay';
-import { updateAiError } from '../utils/Actions';
+import { 
+    addMessageAssistant, 
+    addMessageUser, 
+    clearConversation,
+    updateError 
+} from '../utils/Actions';
 
 export function Notifications({ length }) {
     return (
@@ -41,9 +46,10 @@ export function Dialog() {
                         body: JSON.stringify(api),
                     });
                     const response = await res.json();
+                    dispatch(addMessageAssistant(response.response));
                     setApiResponse(response.response);
                 } catch (err) { // if the server returning error for whatever reason inform the user
-                    dispatch( updateAiError('AI response error. Check if you are logged in and if the internet is up.'));
+                    dispatch(updateError('ERROR','AI response error. Check if you are logged in and if the internet is up.'));
                 }
                 setApi(null);
             }
@@ -52,12 +58,24 @@ export function Dialog() {
     }, [api]);
 
     const handleClick = (e) => {
-        // Preventing the default behavior of the form submit (which is to refresh the page)
-        //e.preventDefault();
 
         const promptData = document.getElementById('prompt');
-        setApi({ prompt: promptData.value });
+        setApi({
+            ...state.conversation,
+            messages: [
+                ...state.conversation.messages,
+                { "role": "user", "content": promptData.value }
+            ]
+        }); // initiate the api call with the existing conversation
+        dispatch(addMessageUser(promptData.value)); // add user prompt to state
         promptData.value = '';
+
+    };
+
+    const handleClearClick = (e) => {
+
+        dispatch( clearConversation() );
+        dispatch( updateError('NOTICE', 'Conversation history cleared') );
 
     };
 
@@ -67,10 +85,10 @@ export function Dialog() {
             <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
 
-                    {state.aiError && <Overlay />}
+                    {state.error.message && <Overlay />}
 
                     <div className="px-4 py-6 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900 sm:col-span-1">About</dt>
+                        <dt className="text-sm font-medium leading-6 text-gray-900 sm:col-span-1">Response</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {apiResponse}
                         </dd>
@@ -93,8 +111,12 @@ export function Dialog() {
                     </div>
 
                     <div className="mt-6 flex items-center justify-end gap-x-6 pr-4">
-                        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-                            Cancel
+                        <button 
+                            type="button"
+                            className="text-sm font-semibold leading-6 text-gray-900"
+                            onClick={handleClearClick}
+                        >
+                            Clear
                         </button>
                         <button
                             type="button"
