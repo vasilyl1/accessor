@@ -20,9 +20,23 @@ export const updateUserNotifications = (notifications) => {
     };
 };
 
-export const updateAiError = (message) => {
+export const updateError = (message) => {
     return {
-        type: 'updateAiError',
+        type: 'updateError',
+        payload: message
+    };
+};
+
+export const addMessageUser = (message) => {
+    return {
+        type: 'addMessageUser',
+        payload: message
+    };
+};
+
+export const addMessageAssistant = (message) => {
+    return {
+        type: 'addMessageAssistant',
         payload: message
     };
 };

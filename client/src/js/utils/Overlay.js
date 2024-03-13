@@ -2,7 +2,7 @@ import React, { Fragment, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { updateAiError } from './Actions';
+import { updateError } from './Actions';
 
 export function Overlay() {
     const [open, setOpen] = useState(true);
@@ -11,7 +11,7 @@ export function Overlay() {
     const okButtonRef = useRef(null);
 
     const onclickOK = () => {
-        dispatch(updateAiError( null ));
+        dispatch(updateError( null ));
         setOpen(false);
     };
 
@@ -53,7 +53,7 @@ export function Overlay() {
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
-                                                    {state.aiError}
+                                                    {state.error}
                                                 </p>
                                             </div>
                                         </div>
